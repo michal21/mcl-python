@@ -42,3 +42,13 @@ Please make sure to update tests as appropriate.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Additions
+
+- Implemented most methods for GT
+
+- Added `pow` and `setHashOf` bindings
+
+- Changed `getStr` and `setStr` to work with strings instead of bytes
+
+- Modified `serialize` to determine result buffer size based on wrapped method return value instead of `strlen`

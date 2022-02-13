@@ -16,7 +16,7 @@ class FpTests(unittest.TestCase):
         r = Fp()
         r.setInt(2)
         result = l + r
-        self.assertEqual(result.getStr(), b"3")
+        self.assertEqual(result.getStr(), "3")
 
     def testSub(self):
         Fp() - Fp()
@@ -61,25 +61,25 @@ class FpTests(unittest.TestCase):
 
     def testStr(self):
         fp = Fp()
-        fp.setStr(b"255")
+        fp.setStr("255")
         s = fp.getStr()
-        self.assertEqual(b"255", s)
+        self.assertEqual("255", s)
 
     def testSetInt(self):
         fp = Fp()
         fp.setInt(123)
-        self.assertEqual(b"123", fp.getStr())
+        self.assertEqual("123", fp.getStr())
 
     def testIsZero(self):
         fp = Fp()
         fp.setInt(0)
-        self.assertEqual(b"0", fp.getStr())
+        self.assertEqual("0", fp.getStr())
         self.assertTrue(fp.isZero())
 
     def testIsOne(self):
         fp = Fp()
         fp.setInt(1)
-        self.assertEqual(b"1", fp.getStr())
+        self.assertEqual("1", fp.getStr())
         self.assertTrue(fp.isOne())
 
     def testRepr(self):

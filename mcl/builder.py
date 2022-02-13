@@ -55,7 +55,7 @@ def buildSetStr(cls):
     )
 
     def setStr(self, value, mode=10):
-        return wrapper(self, value, len(value), mode)
+        return wrapper(self, value.encode(), len(value), mode)
 
     return setStr
 
@@ -99,7 +99,7 @@ def buildGetStr(cls):
     def getStr(self, mode=10):
         buffer = ctypes.create_string_buffer(b"\0" * BUFFER_SIZE)
         wrapper(buffer, BUFFER_SIZE, self, mode)
-        return buffer.value
+        return buffer.value.decode()
 
     return getStr
 
@@ -192,6 +192,19 @@ def buildMul(cls, right_op):
 
     return mul
 
+def buildPow(cls, right_op):
+    wrapper = utils.wrap_function(
+        hook.mclbls12_384,
+        f"mclBn{cls.__name__}_pow",
+        [ctypes.POINTER(cls), ctypes.POINTER(cls), ctypes.POINTER(right_op)],
+    )
+
+    def xpow(self, right):
+        result = cls()
+        wrapper(result, self, right)
+        return result
+
+    return xpow
 
 def buildSerialize(cls):
     wrapper = utils.wrap_function(
@@ -203,12 +216,13 @@ def buildSerialize(cls):
             ctypes.POINTER(cls),
             ctypes.c_uint64,
         ],
+        ctypes.c_size_t,
     )
 
     def serialize(self, mode=10):
         buffer = ctypes.create_string_buffer(b"\0" * BUFFER_SIZE)
-        wrapper(buffer, BUFFER_SIZE, self, mode)
-        return buffer.value
+        sz = wrapper(buffer, BUFFER_SIZE, self, mode)
+        return buffer[:sz]
 
     return serialize
 
@@ -241,6 +255,20 @@ def buildHashAndMapTo(cls):
 
     return hashAndMapTo
 
+def buildSetHashOf(cls):
+    wrapper = utils.wrap_function(
+        hook.mclbls12_384,
+        f"mclBn{cls.__name__}_setHashOf",
+        [ctypes.POINTER(cls), ctypes.c_char_p, ctypes.c_size_t],
+    )
+
+    @staticmethod
+    def setHashOf(value):
+        result = cls()
+        wrapper(result, ctypes.c_char_p(value), len(value))
+        return result
+
+    return setHashOf
 
 def buildPairing(cls, left_group, right_group):
     wrapper = utils.wrap_function(

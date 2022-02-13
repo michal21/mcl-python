@@ -8,7 +8,7 @@ class FrTests(unittest.TestCase):
         self.assertIsNotNone(Fr())
 
     def testSetStr(self):
-        Fr().setStr(b"12345678901234567")
+        Fr().setStr("12345678901234567")
 
     def testIsEqual(self):
         l = Fr()
@@ -23,9 +23,9 @@ class FrTests(unittest.TestCase):
 
     def testGetStr(self):
         fr = Fr()
-        fr.setStr(b"255")
+        fr.setStr("255")
         s = fr.getStr()
-        self.assertEqual(b"255", s)
+        self.assertEqual("255", s)
 
     def testByCSPRNG(self):
         Fr().setByCSPRNG()
